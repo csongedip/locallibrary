@@ -1,0 +1,32 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Author: {{ author }}</h1>
+    (
+        {{author.date_of_birth}} -
+          {% if author.date_of.death %}
+              {{ author.date_of_death }}
+          {% endif %}
+    )
+    {% if perms.catalog.can_mark_returned %}
+        <a href="{% url 'author-update' author.id %}">Modify</a>
+    {% endif %}
+  <!--
+  <p><strong>First name:</strong> {{ author.first_name }}</p>
+  <p><strong>Last name:</strong> {{ author.last_name }}</p>
+  <p><strong>Date of birth:</strong> {{ author.date_of_birth }}</p>
+  <p><strong>Date of death:</strong> {{ author.date_of_death }}</p>
+  -->
+
+  <div style="margin-left:20px;margin-top:20px">
+    <br/>
+    <h4>Books in library</h4>
+
+    {% for book in author.book_set.all %}
+      <hr>
+        <p><strong><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></strong> ({{ book.language.name }})</p>
+      <p><strong>Summary:</strong> {{ book.summary }}</p>
+
+    {% endfor %}
+  </div>
+{% endblock %}
